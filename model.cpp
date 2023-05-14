@@ -2,16 +2,17 @@
 #include<QDebug>
 void Model::SetModelByLevel(int level){
     if(level==1){
-        hero.SetHero(1, {20, 60});
-        std::vector<QPoint> way={{0,60},{160, 60}};
-        std::vector<Enemy> enemies={{1,{{100,60},{160, 60}}, Enemy::Bee}};
-        std::vector<coint> coints={{{60, 60}}};
+        std::vector<QPointF> way={{0,150},{450, 150}};
+        hero.SetHero(1, {way[0].x()+5, way[0].y()});
+        std::vector<Enemy> enemies={{1,{{75,way[0].y()},{120, way[0].y()}}, Enemy::Bee},{1,{{200,way[0].y()},{240, way[0].y()}}, Enemy::Bee}};
+        std::vector<coint> coints={{{60, 100}},{{120,100}}};
         currentMap.setMap(way,enemies,coints);//currentMap=maps[0]
+
     }
 };
 void Model::changeEnemiesPosition(){
     for(auto &enemy: currentMap.enemies){
-        int posX = enemy.moveWay[0].rx()+(enemy.position.rx()-enemy.moveWay[0].rx()+20)%(enemy.moveWay[1].rx()-enemy.moveWay[0].rx());
-        enemy.position.rx()=posX;
+
+        enemy.position=enemy.trajectory.positionByTrajectory().second;
     }
 };

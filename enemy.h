@@ -3,7 +3,10 @@
 
 #include <QPoint>
 #include <QPair>
+#include <QDebug>
+
 #include <vector>
+#include <trajectory.h>
 class Enemy
 {
 public:
@@ -11,14 +14,16 @@ public:
         Snail, Bee
     };
     Enemy(){}
-    Enemy(int num, std::vector<QPoint> moveWay_, ClassType name_):
-        NumOfAttackForDeath(num),moveWay(moveWay_),name(name_){
-        position = moveWay[0];
+    Trajectory trajectory;
+    Enemy(int num, std::vector<QPointF> moveWay_, ClassType name_){
+        NumOfAttackForDeath=num;
+        trajectory.setTrajectory(moveWay_, "Bee");
+        name=name_;
+        position = moveWay_[0];
     };
 
     int NumOfAttackForDeath;
-    std::vector<QPoint> moveWay;
-    QPoint position;
+    QPointF position;
     ClassType name;
 };
 
