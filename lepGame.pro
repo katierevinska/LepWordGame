@@ -17,6 +17,7 @@ SOURCES += \
     map.cpp \
     model.cpp \
     presenter.cpp \
+    trajectory.cpp \
     view.cpp
 
 HEADERS += \
@@ -27,6 +28,7 @@ HEADERS += \
     map.h \
     model.h \
     presenter.h \
+    trajectory.h \
     view.h
 
 # Default rules for deployment.

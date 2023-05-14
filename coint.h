@@ -5,8 +5,9 @@
 class coint
 {
 public:
-    coint(QPoint position_):position(position_){};
-    QPoint position;
+    coint(QPointF position_):position(position_){};
+    QPointF position;
+    int NumOfGold=10;
 };
 
 #endif // COINT_H

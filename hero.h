@@ -2,14 +2,15 @@
 #define HERO_H
 
 #include <QPoint>
-
+#include <trajectory.h>
 class Hero
 {
 public:
-    Hero(){};
-    void SetHero(int num, QPoint pos){NumberOfLives=num; position=pos;};
+    Hero();
+    void SetHero(int num, QPointF pos){NumberOfLives=num; position=pos;};
     int NumberOfLives;
-    QPoint position;
+    QPointF position;
+    Trajectory trajectory;
 };
 
 #endif // HERO_H
