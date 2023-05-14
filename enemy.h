@@ -3,7 +3,7 @@
 
 #include <QPoint>
 #include <QPair>
-#include <QDebug>
+//#include <QDebug>
 
 #include <vector>
 #include <trajectory.h>

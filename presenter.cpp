@@ -1,7 +1,7 @@
 #include "presenter.h"
 #include "view.h"
 #include<QObject>
-#include<QDebug>
+//#include<QDebug>
 
 //как обработать то что нельзя идти по воздуху? наверное считать траекторию учитывая положение от земли.
 
@@ -13,6 +13,12 @@ Presenter::Presenter():
     connect( timer, &QTimer::timeout, this, &Presenter::moveTimeHero);
 }
 void Presenter::moveEvents(QString str){
+    if(str=="Bullet"){
+        if(model_->hero.bullets>0){
+        model_->createFlyingBullet(model_->hero.position);
+        model_->hero.bullets--;
+        }
+    }else{
     if(timer->isActive()){
 
         timer->stop();
@@ -23,9 +29,10 @@ void Presenter::moveEvents(QString str){
     }
     if((str=="RightAndUp")&&model_->currentMap.way[0].y()-model_->hero.position.y()>30){//change
         return;
-    }else{
     }
-    model_->hero.trajectory.setTrajectory({model_->hero.position,str});
+        model_->hero.trajectory.setTrajectory({model_->hero.position,str});
+    }
+
 }
 void Presenter::moveTimeHero(){
 
@@ -40,6 +47,7 @@ void Presenter::moveTimeHero(){
 }
 void Presenter::startGame(int numLeven){
     GameOver();
+
     setLevel(numLeven);
     code = Go;
     timerId = startTimer(100);
@@ -48,12 +56,16 @@ void Presenter::startGame(int numLeven){
 }
 void Presenter::setLevel(int level){
     if(level == 1){
+
         model_->SetModelByLevel(level);
+
     }
 };
 void Presenter::timerEvent(QTimerEvent *event){
 
     model_->changeEnemiesPosition();//not main!!!
+
+    model_->changeFlyingBulletsPosition();
     changeData(calculateEvent());
     //view_->update();
 }
@@ -75,12 +87,17 @@ QPair<Presenter::EventType, int> Presenter::calcRoad(){
         return{Presenter::Road, i};
     }
     else{
-        qDebug()<<model_->hero.position;
         return{Presenter::Nothing, -1};
     }
 }
 QPair<Presenter::EventType, int> Presenter::calculateEvent(){
     for(int i = 0; i < model_->currentMap.enemies.size();i++){
+        for(int j=0; j<model_->flyingBullets.size();++j){
+            if(pow(model_->currentMap.enemies[i].position.x()-model_->flyingBullets[j].position.x(),2)+pow(model_->currentMap.enemies[i].position.y()-model_->flyingBullets[j].position.y(),2)<25){
+                model_->flyingBullets.erase(model_->flyingBullets.begin()+j);
+                return {Presenter::Attac,i};
+            }
+        }
         if(pow(model_->hero.position.x()-model_->currentMap.enemies[i].position.x(),2)+pow(model_->hero.position.y()-model_->currentMap.enemies[i].position.y(),2)<100){
             return {Presenter::Enemy,i};
         }
@@ -90,12 +107,17 @@ QPair<Presenter::EventType, int> Presenter::calculateEvent(){
             return {Presenter::Coint,i};
         }
     }
+    for(int i = 0; i < model_->currentMap.bullets.size();i++){
+        if(pow(model_->hero.position.x()-model_->currentMap.bullets[i].position.x(),2)+pow(model_->hero.position.y()-model_->currentMap.bullets[i].position.y(),2)<100){
+            return {Presenter::Bullet,i};
+        }
+    }
     return{Presenter::Nothing, -1};
 }
 void Presenter::GameOver(){
-    qDebug()<<"!";
     view_->mess->setText("end(");
     timer->stop();//use clear trajectory
+    model_->flyingBullets.clear();
     if(code==Go){
         killTimer(timerId);
     }
@@ -108,9 +130,20 @@ void Presenter::changeData(QPair<Presenter::EventType, int> eventPair){
             GameOver();
         }
     }
+    if(eventPair.first==Presenter::Attac){
+        model_->currentMap.enemies[eventPair.second].NumOfAttackForDeath--;
+        if(model_->currentMap.enemies[eventPair.second].NumOfAttackForDeath==0){
+            model_->currentMap.enemies.erase(model_->currentMap.enemies.begin()+eventPair.second);
+        }
+    }
     if(eventPair.first==Presenter::Coint){
         model_->gold+=model_->currentMap.coints[eventPair.second].NumOfGold;
         model_->currentMap.coints.erase(model_->currentMap.coints.begin()+eventPair.second);
+    }
+    if(eventPair.first==Presenter::Bullet){
+      model_->hero.bullets+=model_->currentMap.bullets[eventPair.second].num;
+ qDebug()<<model_->hero.bullets;
+        model_->currentMap.bullets.erase(model_->currentMap.bullets.begin()+eventPair.second);
     }
         //else if Presenter::Way->>timer.stop(),view_->update(),trajectory.clear
     else if(eventPair.first==Presenter::Nothing){

@@ -9,6 +9,7 @@ public:
     Hero();
     void SetHero(int num, QPointF pos){NumberOfLives=num; position=pos;};
     int NumberOfLives;
+    int bullets=0;
     QPointF position;
     Trajectory trajectory;
 };

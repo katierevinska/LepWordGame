@@ -18,6 +18,7 @@ public:
     void painterMapWay(QPainter* painter);
     void painterEnemies(QPainter* painter);
     void painterCoints(QPainter* painter);
+    void painterBullets(QPainter* painter);
     void keyPressEvent(QKeyEvent* event) override;
 private:
     abstract_presenter* presenter_;

@@ -14,7 +14,7 @@ class Presenter : public abstract_presenter
 public:
     Presenter();
     enum EventType{
-        Coint, Enemy, Nothing, Road
+        Coint, Enemy, Nothing, Road,Bullet,Attac
     };
     enum GameCode {
         Fail, Win, Go
