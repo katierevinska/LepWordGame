@@ -10,6 +10,7 @@ CONFIG += c++17
 
 SOURCES += \
     abstract_presenter.cpp \
+    bullet.cpp \
     coint.cpp \
     enemy.cpp \
     hero.cpp \
@@ -22,6 +23,7 @@ SOURCES += \
 
 HEADERS += \
     abstract_presenter.h \
+    bullet.h \
     coint.h \
     enemy.h \
     hero.h \

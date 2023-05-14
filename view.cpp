@@ -27,7 +27,17 @@ void View::paintEvent(QPaintEvent* event){
     painterMapWay(&painter);
     painterEnemies(&painter);
     painterCoints(&painter);
+    painterBullets(&painter);
     painter.restore();
+}
+void View::painterBullets(QPainter* painter){
+    QBrush brush(Qt::black);
+    painter->setBrush(brush);
+    for(auto bullet: presenter_->getModel().get()->currentMap.bullets)
+        painter->drawEllipse({bullet.position},3,3);
+    for(auto bullet_: presenter_->getModel().get()->flyingBullets){
+        painter->drawEllipse(bullet_.position,3,3);
+    }
 }
 void View::painterCoints(QPainter* painter){
     QBrush brush(Qt::yellow);
@@ -62,7 +72,11 @@ void View::keyPressEvent(QKeyEvent* event){
         presenter_->moveEvents("Right");
     } else if(event->key()==Qt::Key_W){
         presenter_->/*getModel().get()->*/moveEvents("RightAndUp");
-    } /*else if(event->key()==Qt::Key_Enter){
+    }
+    else if(event->key()==Qt::Key_E){
+
+            presenter_->/*getModel().get()->*/moveEvents("Bullet");
+        }/*else if(event->key()==Qt::Key_Enter){
 presenter_->moveEvents("Attack");
 } else if(event->key()==Qt::Key_Enter+Qt::Key_D){
     presenter_->moveEvents("RightAndAttack");
