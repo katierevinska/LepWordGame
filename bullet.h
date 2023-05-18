@@ -7,8 +7,8 @@ class Bullet
 {
 public:
     Bullet(QPointF position_):position(position_){
- trajectory.setTrajectory({position_,{position_.rx()+100,position_.ry()}},"Bullet");
 
+ trajectory.setTrajectory({position_,"Attack"});
     };
     QPointF position;
     int num=1;

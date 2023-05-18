@@ -1,8 +1,7 @@
 #include "view.h"
 #include"abstract_presenter.h"
 #include "model.h"
-#include <QPainter>
-
+#include<vector>
 View::View(abstract_presenter* presenter)
         :    QMainWindow(nullptr),
              presenter_(presenter),
@@ -23,6 +22,11 @@ View::~View(){}
 void View::paintEvent(QPaintEvent* event){
     QPainter painter(this);
     painter.save();
+    QPointF point((double)this->width(),(double)this->height());
+    std::vector<QPointF> pol{{0,0},{point.x(),0},point, {0,point.y()}};
+    painter.setPen({Qt::black, 1});
+    painter.setBrush(QColor (255, 255, 255, 255));
+    //painter.drawPolygon({{pol}});
     painterHero(&painter);
     painterMapWay(&painter);
     painterEnemies(&painter);
@@ -53,9 +57,10 @@ void View::painterHero(QPainter* painter){
 void View::painterMapWay(QPainter* painter){
     QBrush brush(Qt::yellow);
     painter->setBrush(brush);
-    //for(int i = 0; i < presenter_->getModel().get()->currentMap.way.size()-1; i++){
-    painter->drawLine((presenter_->getModel().get()->currentMap.way)[0], presenter_->getModel().get()->currentMap.way[1]);
-    //}
+for(auto pol: presenter_->getModel().get()->currentMap.way){
+    painter->drawPolyline(pol);
+  //  painter->drawPolyline(presenter_->getModel().get()->currentMap.way[0]);
+}
 }
 void View::painterEnemies(QPainter* painter){
     QBrush brush(Qt::red);
@@ -65,25 +70,18 @@ void View::painterEnemies(QPainter* painter){
         painter->drawEllipse({enemy.position},5,5);
 }
 void View::keyPressEvent(QKeyEvent* event){
-/*if(event->key()==Qt::Key_W){
+if(event->key()==Qt::Key_W){
    presenter_->moveEvents("Up");
-} else */
+}
     if(event->key()==Qt::Key_D){
         presenter_->moveEvents("Right");
-    } else if(event->key()==Qt::Key_W){
-        presenter_->/*getModel().get()->*/moveEvents("RightAndUp");
     }
-    else if(event->key()==Qt::Key_E){
 
-            presenter_->/*getModel().get()->*/moveEvents("Bullet");
-        }/*else if(event->key()==Qt::Key_Enter){
-presenter_->moveEvents("Attack");
-} else if(event->key()==Qt::Key_Enter+Qt::Key_D){
-    presenter_->moveEvents("RightAndAttack");
-} else if(event->key()==Qt::Key_Enter+Qt::Key_W){
-   presenter_->moveEvents("UpAndAttack");
-} else if(event->key()==Qt::Key_Enter+Qt::Key_W+Qt::Key_D){
-  presenter_->moveEvents("RightAndUpAndAttack");
-}*/
+        if(event->key()==Qt::Key_A){
+            presenter_->moveEvents("Left");
+        }
+    if(event->key()==Qt::Key_E){
+ presenter_->moveEvents("Attack");
+        }
 }
 

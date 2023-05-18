@@ -7,6 +7,9 @@
 #include <QComboBox>
 #include <QKeyEvent>
 #include <QLabel>
+#include <QPaintEvent>
+#include <QPainter>
+
 class View: public QMainWindow
 {
     Q_OBJECT

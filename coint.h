@@ -1,6 +1,6 @@
 #ifndef COINT_H
 #define COINT_H
-#include <QPoint>
+#include <QPointF>
 
 class coint
 {

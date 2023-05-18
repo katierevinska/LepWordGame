@@ -1,9 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <QPoint>
+#include <QPointF>
 #include <QPair>
-//#include <QDebug>
+
 
 #include <vector>
 #include <trajectory.h>

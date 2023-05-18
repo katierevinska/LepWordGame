@@ -7,6 +7,7 @@
 #include "trajectory.h"
 #include<memory>
 #include<QTimer>
+#include<QElapsedTimer>
 #include<QPair>
 
 class Presenter : public abstract_presenter
