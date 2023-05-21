@@ -6,11 +6,20 @@
 class Bullet
 {
 public:
-    Bullet(QPointF position_):position(position_){
-
- trajectory.setTrajectory({position_,"Attack"});
+    enum TypeOfBullet{
+        ForKillHero, ForKillEnemy
+    };
+    Bullet(QPointF position_):position(position_){};
+    Bullet(QPointF position_, QString type):position(position_){
+        if(type == "forKillHero"){
+            bulletType = ForKillHero;
+        }else{
+            bulletType = ForKillEnemy;
+        }
+        trajectory.setTrajectory({position_,"Attack"});
     };
     QPointF position;
+    TypeOfBullet bulletType;
     int num=1;
     Trajectory trajectory;
 };

@@ -11,7 +11,7 @@ public:
     void setTrajectory(QPair<QPointF, QString> heroAndCode);
     void setTrajectory(std::vector<QPointF>, QString);
     enum Type{
-        Up, Right, Left, Attack_, Bee, Not
+         Not, Up, Right, Left, Attack_, Bee, Troll
     };
     Type typeOfTrajectory;
     QPointF firstPosition;
