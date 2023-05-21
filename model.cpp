@@ -15,8 +15,8 @@ void Model::SetModelByLevel(int level){
                 currentMap.setMap(way,enemies,coints,bullets);//currentMap=maps[0]
  }
 };
-void Model::createFlyingBullet(QPointF pos, QString type){
-    flyingBullets.push_back({pos, type});
+void Model::createFlyingBullet(QPointF pos, QString type, int direction){
+    flyingBullets.push_back({pos, type,direction});
 }
 
 void Model::changeEnemiesPosition(){

@@ -10,13 +10,18 @@ public:
         ForKillHero, ForKillEnemy
     };
     Bullet(QPointF position_):position(position_){};
-    Bullet(QPointF position_, QString type):position(position_){
+    Bullet(QPointF position_, QString type, int direction):position(position_){
         if(type == "forKillHero"){
             bulletType = ForKillHero;
         }else{
             bulletType = ForKillEnemy;
         }
-        trajectory.setTrajectory({position_,"Attack"});
+        if(direction==1){
+            trajectory.setTrajectory({position_,"RAttack"});
+        }else{
+            trajectory.setTrajectory({position_,"LAttack"});
+        }
+
     };
     QPointF position;
     TypeOfBullet bulletType;
