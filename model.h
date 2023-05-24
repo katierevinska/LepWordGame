@@ -17,7 +17,7 @@ public:
     void SetModelByLevel(int level);
     void changeEnemiesPosition();
     void changeFlyingBulletsPosition();
-    void createFlyingBullet(QPointF, QString);
+    void createFlyingBullet(QPointF, QString, int);
     void moveHeroEvent(int);
 };
 

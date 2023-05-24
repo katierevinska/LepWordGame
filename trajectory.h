@@ -23,7 +23,9 @@ public:
     //------------------
     int flagDirection=1;
     QPair<End_,QPointF> positionByTime();
-    void stopJump();
+    void stopByVerticalRoad();
+    void stopByUpHorizontalRoad();
+    void stopByDownHorizontalRoad();
     double V_x=0;
     double V_y=0;
     double a_=0;
