@@ -1,85 +1,110 @@
 #include "trajectory.h"
-//#include<QDebug>
+#include "QDebug"
 void Trajectory::setTrajectory(std::vector<QPointF> way_, QString event){
     currentPosition.setX(way_[0].x());
-currentPosition.setY(way_[0].y());
-way=way_;
-if(event=="Bee"){
-
-    typeOfTrajectory=Trajectory::Bee;
-
-    dx = 3;
-    }else if(event == "Bullet"){
-
-        typeOfTrajectory = Trajectory::Attack_;
-        dx=2;
-
+    currentPosition.setY(way_[0].y());
+    way=way_;
+    if(event=="Bee"){
+        typeOfTrajectory=Trajectory::Bee;
+        V_x = 0.2;
+    }
+    if(event=="Troll"){
+        typeOfTrajectory=Trajectory::Troll;
+        V_x = 1.1;
     }
 }
-void Trajectory::setTrajectory(QPair<QPointF, QString> heroAndCode){
+void Trajectory::setTrajectory(QPair<QPointF, QString> creatureAndCode){
+    currentPosition.setX(creatureAndCode.first.x());
+    currentPosition.setY(creatureAndCode.first.y());
+    if(creatureAndCode.second == "LAttack"){
+        typeOfTrajectory = Trajectory::Attack_;
+        flagDirection=-1;
+        endPos.setX(currentPosition.x()+70*flagDirection);
+        V_x=1.8*flagDirection;
+    }else if(creatureAndCode.second == "RAttack"){
+        typeOfTrajectory = Trajectory::Attack_;
+        flagDirection=1;
+        endPos.setX(currentPosition.x()+70*flagDirection);
+        V_x=1.8*flagDirection;
+    }else
+        if(creatureAndCode.second=="Right"){
+            flagDirection=1;
+            if(typeOfTrajectory == Trajectory::Up){
+                if(abs(V_x)<2)
+                    V_x+=1;
+            }else{
+                typeOfTrajectory = Trajectory::Right;
+                V_x=0.5;
+                endPos.setX(currentPosition.x()+50);
 
-    firstPosition.setX(heroAndCode.first.x());
-    firstPosition.setY(heroAndCode.first.y());
-    currentPosition.setX(firstPosition.x());
-    currentPosition.setY(firstPosition.y());
-    if(heroAndCode.second=="Right"){
-        typeOfTrajectory = Trajectory::Right;
-        dx=1;
-        xAlreadyGone=0;
-        endPos.setX(firstPosition.x()+20);
-    }else if(heroAndCode.second == "RightAndUp"){
-        typeOfTrajectory = Trajectory::RightAndUp;
-        dx=1;
-        //xAlreadyGone=0;
-        delteX = 30;
-        k =20;
-    }
-    else if(heroAndCode.second == "RightAndDown"){
-        typeOfTrajectory = Trajectory::RightAndDown;
-        dx=1;
-        firstPosition.rx()-=2*dx;
-        //xAlreadyGone=0;
-        delteX = 3;
-        k =15;//calculate
-    }
+            }
+        }
+        else
+            if(creatureAndCode.second=="Left"){
+                flagDirection=-1;
+                if(typeOfTrajectory == Trajectory::Up){
+                    if(abs(V_x)<2)
+                        V_x-=1;
+                }else{
+                    typeOfTrajectory = Trajectory::Left;
+                    V_x=-1;
+                    endPos.setX(currentPosition.x()-50);
+
+                }
+            }else if(creatureAndCode.second == "Up" && abs(V_y)<0.4){
+                typeOfTrajectory = Trajectory::Up;
+                V_y=2.3;
+                a_=0.03;
+            }
 };
-QPair<Trajectory::End_,QPointF> Trajectory::positionByTrajectory(){
-    if(typeOfTrajectory==Trajectory::Bee){
+void Trajectory::stopByVerticalRoad(){
+   // typeOfTrajectory = Trajectory::Not;
+    // a_=0;
+    V_x=0;
+    //V_y=0;
+}
 
-        double x_=  way[0].x()+(currentPosition.x()-way[0].x()+dx);
+void Trajectory::stopByDownHorizontalRoad(){
+  a_=0;
+    qDebug()<<"downnn";
+    V_y=0;
+    if(typeOfTrajectory==Trajectory::Up){
+        V_x=0;
+        //typeOfTrajectory = Trajectory::Not;
+    }
+    typeOfTrajectory = Trajectory::Not;
+}
+void Trajectory::stopByUpHorizontalRoad(){
+    //
+    V_y=0;
+    if(typeOfTrajectory==Trajectory::Up){
+        V_x=0;
+        //typeOfTrajectory = Trajectory::Not;
+    }
+    typeOfTrajectory = Trajectory::Up;
+}
+QPair<Trajectory::End_,QPointF> Trajectory::positionByTrajectory(){
+    if(typeOfTrajectory==Trajectory::Bee || typeOfTrajectory==Trajectory::Troll){
+        double x_=  way[0].x()+(currentPosition.x()-way[0].x()+flagDirection*V_x);
         int endX = way.size()-1;
-        if(x_ > way[endX].x()){
-            x_ -= way[endX].x()-way[0].x();
+        if(x_ > way[endX].x() || x_ < way[0].x()){
+            //x_ -= way[endX].x()-way[0].x();
+            flagDirection *=-1;
         }
         currentPosition.setX(x_);
 
-        return {Yes, currentPosition};
-    }
 
-    if(typeOfTrajectory==Trajectory::Right){
-        currentPosition.rx()+=dx;
-        if(currentPosition.x()!=endPos.x()){
-            return {Yes, currentPosition};
-        }else{
-            return {No, currentPosition};
-        }
-    }   if(typeOfTrajectory==Trajectory::Attack_){
-        currentPosition.rx()+=dx;
-        if(currentPosition.x()<way[way.size()-1].x()){
-            return {Yes, currentPosition};
-        }else{
-
-            return {No, currentPosition};
-        }
+    }return {Yes, currentPosition};//replace
+}
+QPair<Trajectory::End_,QPointF> Trajectory::positionByTime(){
+    currentPosition.rx()+=V_x;
+    V_y -= a_*1;
+    currentPosition.ry()-=V_y;
+    if((typeOfTrajectory==Trajectory::Right||typeOfTrajectory==Trajectory::Left
+        || typeOfTrajectory==Trajectory::Attack_)&&
+            (flagDirection*(currentPosition.x()-endPos.x())>0) ){
+        return {No, {currentPosition.x()+V_x,currentPosition.y()-V_y}};
     }
-    if(typeOfTrajectory==Trajectory::RightAndUp){
-        currentPosition.setX(currentPosition.x()+dx);
-        currentPosition.setY(firstPosition.y()+(currentPosition.x()-firstPosition.x())*(currentPosition.x()-firstPosition.x()-2*delteX)/k);
-        return {Yes, {currentPosition.x(),currentPosition.y()}};
-    }
-//else if RightAndDown
-    currentPosition.setX(currentPosition.x()+dx);
-    currentPosition.setY(firstPosition.y()+(currentPosition.x()-(firstPosition.x()-delteX))*(currentPosition.x()-(firstPosition.x()+delteX))/k);
+    return {Yes, {currentPosition.x()+V_x,currentPosition.y()-V_y}};
 
-    return {Yes, {currentPosition.x(),currentPosition.y()}};
 };

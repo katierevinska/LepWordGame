@@ -1,9 +1,9 @@
 #ifndef ENEMY_H
 #define ENEMY_H
 
-#include <QPoint>
+#include <QPointF>
 #include <QPair>
-//#include <QDebug>
+
 
 #include <vector>
 #include <trajectory.h>
@@ -11,17 +11,19 @@ class Enemy
 {
 public:
     enum ClassType {
-        Snail, Bee
+        Snail, Bee, Troll
     };
     Enemy(){}
     Trajectory trajectory;
     Enemy(int num, std::vector<QPointF> moveWay_, ClassType name_){
         NumOfAttackForDeath=num;
+        if(name_==Bee)
         trajectory.setTrajectory(moveWay_, "Bee");
+        if(name_==Troll)
+        trajectory.setTrajectory(moveWay_, "Troll");
         name=name_;
         position = moveWay_[0];
     };
-
     int NumOfAttackForDeath;
     QPointF position;
     ClassType name;

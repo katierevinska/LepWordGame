@@ -1,6 +1,6 @@
 #ifndef TRAJECTORY_H
 #define TRAJECTORY_H
-#include<QPoint>
+#include<QPointF>
 #include<QString>
 #include<vector>
 #include<QPair>
@@ -10,10 +10,8 @@ public:
     Trajectory(){};
     void setTrajectory(QPair<QPointF, QString> heroAndCode);
     void setTrajectory(std::vector<QPointF>, QString);
-    double xAlreadyGone;
-    double dx;
     enum Type{
-        Up, Right, RightAndUp,RightAndDown, Attack_, Bee
+         Not, Up, Right, Left, Attack_, Bee, Troll
     };
     Type typeOfTrajectory;
     QPointF firstPosition;
@@ -21,9 +19,16 @@ public:
     std::vector<QPointF> way;
     enum End_{Yes, No};
     QPointF endPos;
-    double delteX;
-    double k;
     QPair<End_,QPointF> positionByTrajectory();
+    //------------------
+    int flagDirection=1;
+    QPair<End_,QPointF> positionByTime();
+    void stopByVerticalRoad();
+    void stopByUpHorizontalRoad();
+    void stopByDownHorizontalRoad();
+    double V_x=0;
+    double V_y=0;
+    double a_=0;
 };
 
 #endif // TRAJECTORY_H

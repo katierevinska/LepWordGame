@@ -7,6 +7,7 @@
 #include "trajectory.h"
 #include<memory>
 #include<QTimer>
+#include<QElapsedTimer>
 #include<QPair>
 
 class Presenter : public abstract_presenter
@@ -14,7 +15,7 @@ class Presenter : public abstract_presenter
 public:
     Presenter();
     enum EventType{
-        Coint, Enemy, Nothing, Road,Bullet,Attac
+        Coint, Enemy, Nothing, Road ,Bullet ,Attac, Killing
     };
     enum GameCode {
         Fail, Win, Go
@@ -25,14 +26,24 @@ public:
     void startGame(int) override;
     void GameOver();
     void setLevel(int);
+    void creatingAttac();
+    void minusLifeOfHero();
+QTimer * immortalityForHero;
     QPair<EventType, int> calculateEvent();
+    QPair<bool,int> calculateKillingEnemy(QPointF position);
+    QPair<bool,int> calculateKillingHero();
+    bool calculateKillingHeroByBullets(QPointF);
+    QPair<bool,int> calculateCoints();
+    QPair<bool,int> calculateBullets();
     QPair<EventType, int> calcRoad();
+
     void changeData(QPair<EventType, int>);
     std::unique_ptr<Model>& getModel() override;
 private slots:
-            void moveTimeHero();
+    void moveTimeHero();
     QTimer *timer;
     int timerId;
+    QTimer *timerForAttack;
 private:
     std::unique_ptr<View> view_;
     std::unique_ptr<Model> model_;
