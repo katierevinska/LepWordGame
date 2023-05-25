@@ -19,14 +19,14 @@ void Presenter::moveEvents(QString str){
     if(str=="Attack"){
         if(model_->hero.bullets>0){
             qDebug()<<model_->hero.trajectory.flagDirection;
-            model_->createFlyingBullet(model_->hero.position,"forKillEnemy",model_->hero.trajectory.flagDirection);
+            model_->createFlyingBullet({{(int)model_->hero.position.x(),(int)model_->hero.position.y()-30}},"forKillEnemy",model_->hero.trajectory.flagDirection);
             model_->hero.bullets--;
         }
     }else{
         if(timer->isActive()){
             timer->stop();
         }
-        timer->start(2);
+        timer->start(10);
         model_->hero.trajectory.setTrajectory({model_->hero.position,str});
     }
 
@@ -64,15 +64,17 @@ void Presenter::moveTimeHero(){
 void Presenter::startGame(int numLeven){
     GameOver();
     setLevel(numLeven);
-    code = Go;
-    timerId = startTimer(10);
+        code = Go;
+    timerId = startTimer(20);
     view_->mess->setText("try");
-    timerForAttack->start(200);
+    timerForAttack->start(300);
+
 }
 void Presenter::setLevel(int level){
     if(level == 1){
-
+    qDebug()<<"start of set level";
         model_->SetModelByLevel(level);
+            qDebug()<<"already set by level";
 view_->p_x=0;
 model_->hero.trajectory.typeOfTrajectory=Trajectory::Not;
     }
@@ -117,44 +119,48 @@ void Presenter::changeData(QPair<Presenter::EventType, int> eventPair){
     }
 }
 QPair<Presenter::EventType, QPointF> Presenter::calcRoad(QPointF posForCheck){
-    QPolygonF hero({{posForCheck.x()-8,posForCheck.y()-8},
-                    {posForCheck.x()+8,posForCheck.y()-8},
-                    {posForCheck.x()+8,posForCheck.y()+8},
-                    {posForCheck.x()-8,posForCheck.y()+8}});
+    QPolygonF hero({{posForCheck.x()-30,posForCheck.y()-93},
+                    {posForCheck.x()+30,posForCheck.y()-93},
+                    {posForCheck.x()+30,posForCheck.y()+8},
+                    {posForCheck.x()-30,posForCheck.y()+8}});
     for(auto road:model_->currentMap.way){
-        if(road.intersects(hero)){
-            for(int i = 0; i < road.size(); ++i){
-                double s_py=road[i].ry();
-                double s_px=road[i].rx();
-                double s_dx=road[(i+1)%(int)(road.size())].rx()-s_px;
-                double s_dy=road[(i+1)%(int)(road.size())].ry()-s_py;
+        if(road.polygon.intersects(hero)){
+            for(int i = 0; i < road.polygon.size(); ++i){
+                double s_py=road.polygon[i].ry();
+                double s_px=road.polygon[i].rx();
+                double s_dx=road.polygon[(i+1)%(int)(road.polygon.size())].rx()-s_px;
+                double s_dy=road.polygon[(i+1)%(int)(road.polygon.size())].ry()-s_py;
                 if(s_dy==0){
                     double T1 = (s_py-posForCheck.y())/8;
                     double T2 = (posForCheck.x()-s_px)/s_dx;
-                if(0<=T2&&T2<=1 && T1>=-1&&T1<=1){//only down road
+                if(0<=T2&&T2<=1 /*&& T1>=-1&&T1<=1*/){
                     if( T1>=0&&T1<=1){
                         qDebug()<<"down"<<T1<<"2"<<T2;
                     posForCheck={posForCheck.x(), posForCheck.y()-(1-T1)*8};
                     return {Presenter::DownHorizontalRoad, posForCheck};
-                    }else if( T1>=-1&&T1<=0){
+                    }else {
+                        T1 = (s_py-posForCheck.y())/55;
+                        if( T1>=-1&&T1<=0){
                         qDebug()<<"up"<<T1<<"2"<<T2;
+                        qDebug()<<"--------------------";
                         posForCheck={posForCheck.x(), posForCheck.y()
-                                     +(T1+1)*8};
+                                     +(T1+1)*55};
                         return {Presenter::UpHorizontalRoad, posForCheck};
-                        }                    
+                        }
+                    }
                 }
 
                 }
                 else if(s_dx==0){
-                  double  T1 = (s_px-posForCheck.x())/8;
+                  double  T1 = (s_px-posForCheck.x())/30;
                   double  T2 = (posForCheck.y()-s_py)/s_dy;
    /// qDebug()<<model_->hero.position <<"road"<<road[i]<<road[(i+1)%(int)(road.size())]<<"t"<<T1<<T2;
                     if(0<=T2&&T2<=1){//слева/справа
                         if(T1>=0 && T1<=1){
-                        posForCheck={posForCheck.x()-(1-T1)*8, posForCheck.y()};
+                        posForCheck={posForCheck.x()-(1-T1)*30, posForCheck.y()};
                        return {Presenter::VerticalRoad, posForCheck};
                         }else if(T1<=0 && T1>=-1){
-                            posForCheck={posForCheck.x()+(1+T1)*8, posForCheck.y()};
+                            posForCheck={posForCheck.x()+(1+T1)*30, posForCheck.y()};
                            return {Presenter::VerticalRoad, posForCheck};
                             }
 
@@ -171,16 +177,16 @@ QPair<Presenter::EventType, QPointF> Presenter::calcRoad(QPointF posForCheck){
 }
 QPair<bool,int> Presenter::calculateKillingEnemy(QPointF position){
     for(int i = 0; i < model_->currentMap.enemies.size();i++){
-        if(pow(model_->currentMap.enemies[i].position.x()-position.x(),2)+
-                pow(model_->currentMap.enemies[i].position.y()-position.y(),2)<90){
+        if(abs(model_->currentMap.enemies[i].position.x()-position.x())<15&&
+                abs(model_->currentMap.enemies[i].position.y()-position.y())<50){
             return {true,i};
         }
     }
     return {false,-1};
 }
 bool Presenter::calculateKillingHeroByBullets(QPointF position){
-    if(pow(position.x()- model_->hero.position.x(),2)+
-            pow(position.y()-model_->hero.position.y(),2)<90){
+    if(abs(position.x()-model_->hero.position.x())<15&&
+               abs(model_->hero.position.y())<50){
         return true;
     }
     return false;
@@ -197,7 +203,7 @@ QPair<bool,int> Presenter::calculateKillingHero(){
 QPair<bool,int> Presenter::calculateCoints(){
     for(int i = 0; i < model_->currentMap.coints.size();i++){
         if(pow(model_->hero.position.x()-model_->currentMap.coints[i].position.x(),2)
-                +pow(model_->hero.position.y()-model_->currentMap.coints[i].position.y(),2)<220){
+                +pow(model_->hero.position.y()-model_->currentMap.coints[i].position.y(),2)<1000){
             return {true,i};
         }
     }
@@ -206,7 +212,7 @@ QPair<bool,int> Presenter::calculateCoints(){
 QPair<bool,int> Presenter::calculateBullets(){
     for(int i = 0; i < model_->currentMap.bullets.size();i++){
         if(pow(model_->hero.position.x()-model_->currentMap.bullets[i].position.x(),2)
-                +pow(model_->hero.position.y()-model_->currentMap.bullets[i].position.y(),2)<220){
+                +pow(model_->hero.position.y()-model_->currentMap.bullets[i].position.y(),2)<500){
             return {true,i};
         }
     }

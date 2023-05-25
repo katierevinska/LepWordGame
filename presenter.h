@@ -15,7 +15,7 @@ class Presenter : public abstract_presenter
 public:
     Presenter();
     enum EventType{
-        Coint, Enemy, Nothing, Road ,Bullet ,Attac, Killing
+        Coint, Enemy, Nothing,DownHorizontalRoad, UpHorizontalRoad,VerticalRoad ,Bullet ,Attac, Killing
     };
     enum GameCode {
         Fail, Win, Go
@@ -35,7 +35,7 @@ QTimer * immortalityForHero;
     bool calculateKillingHeroByBullets(QPointF);
     QPair<bool,int> calculateCoints();
     QPair<bool,int> calculateBullets();
-    QPair<EventType, int> calcRoad();
+    QPair<EventType, QPointF> calcRoad(QPointF);
 
     void changeData(QPair<EventType, int>);
     std::unique_ptr<Model>& getModel() override;

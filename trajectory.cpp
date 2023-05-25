@@ -19,12 +19,12 @@ void Trajectory::setTrajectory(QPair<QPointF, QString> creatureAndCode){
     if(creatureAndCode.second == "LAttack"){
         typeOfTrajectory = Trajectory::Attack_;
         flagDirection=-1;
-        endPos.setX(currentPosition.x()+70*flagDirection);
+        endPos.setX(currentPosition.x()+200*flagDirection);
         V_x=1.8*flagDirection;
     }else if(creatureAndCode.second == "RAttack"){
         typeOfTrajectory = Trajectory::Attack_;
         flagDirection=1;
-        endPos.setX(currentPosition.x()+70*flagDirection);
+        endPos.setX(currentPosition.x()+200*flagDirection);
         V_x=1.8*flagDirection;
     }else
         if(creatureAndCode.second=="Right"){

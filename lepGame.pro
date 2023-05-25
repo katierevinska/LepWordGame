@@ -18,6 +18,7 @@ SOURCES += \
     map.cpp \
     model.cpp \
     presenter.cpp \
+    road.cpp \
     trajectory.cpp \
     view.cpp
 
@@ -30,6 +31,7 @@ HEADERS += \
     map.h \
     model.h \
     presenter.h \
+    road.h \
     trajectory.h \
     view.h
 

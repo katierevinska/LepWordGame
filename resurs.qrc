@@ -1,5 +1,12 @@
 <RCC>
     <qresource prefix="/">
         <file>image/unnamed.png</file>
+        <file>image/ground.png</file>
+        <file>image/sky.png</file>
+        <file>image/block.png</file>
+        <file>image/cointss.png</file>
+        <file>image/bullet.png</file>
+        <file>image/enemy2.png</file>
+        <file>image/enemy1.png</file>
     </qresource>
 </RCC>
