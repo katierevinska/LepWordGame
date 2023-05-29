@@ -17,10 +17,12 @@ public:
     Trajectory trajectory;
     Enemy(int num, std::vector<QPointF> moveWay_, ClassType name_){
         NumOfAttackForDeath=num;
-        if(name_==Bee)
-        trajectory.setTrajectory(moveWay_, "Bee");
+        if(name_==Snail)
+        trajectory.setTrajectory(moveWay_, "Snail");
         if(name_==Troll)
         trajectory.setTrajectory(moveWay_, "Troll");
+        if(name_==Bee)
+        trajectory.setTrajectory(moveWay_, "Bee");
         name=name_;
         position = moveWay_[0];
     };

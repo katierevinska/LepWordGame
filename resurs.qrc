@@ -8,5 +8,10 @@
         <file>image/bullet.png</file>
         <file>image/enemy2.png</file>
         <file>image/enemy1.png</file>
+        <file>image/bee.png</file>
+        <file>image/unnamedill.png</file>
+        <file>image/goold.png</file>
+        <file>image/startPict.png</file>
+        <file>image/addingBullet.png</file>
     </qresource>
 </RCC>

@@ -5,8 +5,21 @@
 class coint
 {
 public:
-    coint(QPointF position_):position(position_){};
+    enum TypeOfGold{
+      Coint,Pot
+    };
+    coint(QPointF position_, TypeOfGold type):position(position_),typeOfGold(type){
+        if(type == Coint){
+            NumOfGold=10;
+        }
+        if(type == Pot){
+            NumOfGold=510;
+        }
+
+    };
+
     QPointF position;
+    TypeOfGold typeOfGold;
     int NumOfGold=10;
 };
 

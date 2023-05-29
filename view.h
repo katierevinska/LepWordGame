@@ -10,6 +10,7 @@
 #include <QPaintEvent>
 #include <QPainter>
 #include<QPixmap>
+
 class View: public QMainWindow
 {
     Q_OBJECT
@@ -25,6 +26,8 @@ public:
     void painterBullets(QPainter* painter);
     void keyPressEvent(QKeyEvent* event) override;
     void resizeEvent(QResizeEvent* event) override;
+    void changeToHealthy();
+    void changeToIll();
  double p_x=0;
 private:
 QPixmap mapGr;
@@ -32,7 +35,10 @@ QPixmap mapBlock;
 QPixmap mapHero;
 QPixmap mapSky;
 QPixmap mapCoint;
+QPixmap mapPot;
+QPixmap addingBullet;
 QPixmap mapBullet;
+QPixmap mapEnemu3;
 QPixmap mapEnemu2;
 QPixmap mapEnemu1;
     abstract_presenter* presenter_;

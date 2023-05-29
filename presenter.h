@@ -1,6 +1,6 @@
 #ifndef PRESENTER_H
 #define PRESENTER_H
-
+#include"firstmenu.h"
 #include "model.h"
 #include "view.h"
 #include "abstract_presenter.h"
@@ -15,16 +15,18 @@ class Presenter : public abstract_presenter
 public:
     Presenter();
     enum EventType{
-        Coint, Enemy, Nothing,DownHorizontalRoad, UpHorizontalRoad,VerticalRoad ,Bullet ,Attac, Killing
+        Coint, Enemy, Nothing,DownHorizontalRoad, UpHorizontalRoad,
+        VerticalRoad ,Bullet ,Attac, Killing, Failing
     };
     enum GameCode {
         Fail, Win, Go
     };
     GameCode code;
-    void timerEvent(QTimerEvent *event) override;
+    void timerEvent();
     void moveEvents(QString str) override;
     void startGame(int) override;
     void GameOver();
+    void Winer();
     void setLevel(int);
     void creatingAttac();
     void minusLifeOfHero();
@@ -42,9 +44,11 @@ QTimer * immortalityForHero;
 private slots:
     void moveTimeHero();
     QTimer *timer;
-    int timerId;
+     QTimer *MainTimer;
+    //int timerId;
     QTimer *timerForAttack;
 private:
+    std::unique_ptr<FirstMenu> menu;
     std::unique_ptr<View> view_;
     std::unique_ptr<Model> model_;
 

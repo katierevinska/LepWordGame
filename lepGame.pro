@@ -13,9 +13,11 @@ SOURCES += \
     bullet.cpp \
     coint.cpp \
     enemy.cpp \
+    firstmenu.cpp \
     hero.cpp \
     main.cpp \
     map.cpp \
+    menu.cpp \
     model.cpp \
     presenter.cpp \
     road.cpp \
@@ -27,14 +29,18 @@ HEADERS += \
     bullet.h \
     coint.h \
     enemy.h \
+    firstmenu.h \
     hero.h \
     map.h \
+    menu.h \
     model.h \
     presenter.h \
     road.h \
     trajectory.h \
     view.h
 
+FORMS += \
+    firstmenu.ui
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
 else: unix:!android: target.path = /opt/$${TARGET}/bin
@@ -42,3 +48,6 @@ else: unix:!android: target.path = /opt/$${TARGET}/bin
 
 RESOURCES += \
     resurs.qrc
+
+DISTFILES += \
+    image/bee.png

@@ -11,13 +11,13 @@ public:
     void setTrajectory(QPair<QPointF, QString> heroAndCode);
     void setTrajectory(std::vector<QPointF>, QString);
     enum Type{
-         Not, Up, Right, Left, Attack_, Bee, Troll
+         Not, Up,SetUp, Right, Left, Attack_, Bee, Troll,Snail
     };
+    enum End_{Yes, No};
     Type typeOfTrajectory;
     QPointF firstPosition;
     QPointF currentPosition;
     std::vector<QPointF> way;
-    enum End_{Yes, No};
     QPointF endPos;
     QPair<End_,QPointF> positionByTrajectory();
     //------------------
@@ -26,6 +26,7 @@ public:
     void stopByVerticalRoad();
     void stopByUpHorizontalRoad();
     void stopByDownHorizontalRoad();
+    void withoutRoad();
     double V_x=0;
     double V_y=0;
     double a_=0;

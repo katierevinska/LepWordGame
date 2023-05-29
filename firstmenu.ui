@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>FirstMenu</class>
+ <widget class="QMainWindow" name="FirstMenu">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>2064</width>
+    <height>1092</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>MainWindow</string>
+  </property>
+  <widget class="QWidget" name="centralwidget">
+   <widget class="QPushButton" name="start">
+    <property name="geometry">
+     <rect>
+      <x>700</x>
+      <y>260</y>
+      <width>461</width>
+      <height>171</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string>Start Game</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="level1">
+    <property name="geometry">
+     <rect>
+      <x>520</x>
+      <y>570</y>
+      <width>221</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LEVEL 1</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="level2">
+    <property name="geometry">
+     <rect>
+      <x>1200</x>
+      <y>570</y>
+      <width>221</width>
+      <height>131</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>LEVEL 2</string>
+    </property>
+   </widget>
+   <widget class="QLabel" name="label">
+    <property name="geometry">
+     <rect>
+      <x>800</x>
+      <y>450</y>
+      <width>251</width>
+      <height>181</height>
+     </rect>
+    </property>
+    <property name="styleSheet">
+     <string notr="true"/>
+    </property>
+    <property name="text">
+     <string/>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QMenuBar" name="menubar">
+   <property name="geometry">
+    <rect>
+     <x>0</x>
+     <y>0</y>
+     <width>2064</width>
+     <height>26</height>
+    </rect>
+   </property>
+  </widget>
+  <widget class="QStatusBar" name="statusbar"/>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
